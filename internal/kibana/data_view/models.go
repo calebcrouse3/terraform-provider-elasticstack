@@ -209,10 +209,23 @@ func convertFieldFormat(item fieldFormatModel, meta utils.MapMeta) kbapi.DataVie
 		Id: item.ID.ValueStringPointer(),
 		Params: utils.ObjectTypeToStruct(meta.Context, item.Params, meta.Path.AtName("params"), meta.Diags,
 			func(item fieldFormatParamsModel, meta utils.ObjectMeta) kbapi.DataViewsFieldformatParams {
+				var lookupEntries map[string]string
+				if !item.LookupEntries.IsNull() {
+					lookupEntries = make(map[string]string)
+					item.LookupEntries.ElementsAs(meta.Context, &lookupEntries, false)
+				}
+
 				return kbapi.DataViewsFieldformatParams{
-					LabelTemplate: item.LabelTemplate.ValueStringPointer(),
-					Pattern:       item.Pattern.ValueStringPointer(),
-					UrlTemplate:   item.UrlTemplate.ValueStringPointer(),
+					LabelTemplate:   item.LabelTemplate.ValueStringPointer(),
+					Pattern:        item.Pattern.ValueStringPointer(),
+					UrlTemplate:    item.UrlTemplate.ValueStringPointer(),
+					LookupEntries:  &lookupEntries,
+					UnknownKeyValue: item.UnknownKeyValue.ValueStringPointer(),
+					BasePath:       item.BasePath.ValueStringPointer(),
+					ContentType:    item.ContentType.ValueStringPointer(),
+					DefaultUrl:     item.DefaultUrl.ValueStringPointer(),
+					Width:          item.Width.ValueStringPointer(),
+					Height:         item.Height.ValueStringPointer(),
 				}
 			}),
 	}
@@ -281,7 +294,15 @@ type fieldFormatModel struct {
 }
 
 type fieldFormatParamsModel struct {
-	Pattern       types.String `tfsdk:"pattern"`
-	UrlTemplate   types.String `tfsdk:"urltemplate"`
-	LabelTemplate types.String `tfsdk:"labeltemplate"`
+	Pattern         types.String `tfsdk:"pattern"`
+	UrlTemplate     types.String `tfsdk:"urltemplate"`
+	LabelTemplate   types.String `tfsdk:"labeltemplate"`
+	LookupEntries   types.Map    `tfsdk:"lookup_entries"`
+	UnknownKeyValue types.String `tfsdk:"unknown_key_value"`
+	// URL format specific params
+	BasePath    types.String `tfsdk:"base_path"`
+	ContentType types.String `tfsdk:"content_type"`
+	DefaultUrl  types.String `tfsdk:"default_url"`
+	Width       types.String `tfsdk:"width"`
+	Height      types.String `tfsdk:"height"`
 }

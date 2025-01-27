@@ -151,3 +151,52 @@ resource "elasticstack_kibana_data_view" "dv" {
 	}
 }`, indexName, indexName, indexName)
 }
+
+func TestAccResourceDataViewWithFieldFormats(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+			PreCheck:                 func() { acctest.PreCheck(t) },
+			ProtoV6ProviderFactories: acctest.Providers,
+			Steps: []resource.TestStep{
+					{
+							Config: `
+resource "elasticstack_kibana_data_view" "test" {
+data_view = {
+	name = "test-formats"
+	title = "Test Formats"
+	
+	field_formats = {
+		"status" = {
+			id = "static_lookup"
+			params = {
+				lookup_entries = {
+					"200" = "OK"
+					"404" = "Not Found"
+				}
+				unknown_key_value = "####"
+			}
+		}
+		
+		"image_url" = {
+			id = "url"
+			params = {
+				urltemplate = "{{value}}"
+				base_path = "https://example.com/images/"
+				content_type = "image"
+				width = "100"
+				height = "100"
+			}
+		}
+	}
+}
+}
+`,
+							Check: resource.ComposeTestCheckFunc(
+									resource.TestCheckResourceAttr("elasticstack_kibana_data_view.test", "data_view.field_formats.status.id", "static_lookup"),
+									resource.TestCheckResourceAttr("elasticstack_kibana_data_view.test", "data_view.field_formats.status.params.unknown_key_value", "####"),
+									resource.TestCheckResourceAttr("elasticstack_kibana_data_view.test", "data_view.field_formats.image_url.id", "url"),
+									resource.TestCheckResourceAttr("elasticstack_kibana_data_view.test", "data_view.field_formats.image_url.params.content_type", "image"),
+							),
+					},
+			},
+	})
+}

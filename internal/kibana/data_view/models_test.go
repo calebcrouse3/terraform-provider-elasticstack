@@ -6,6 +6,7 @@ import (
 
 	"github.com/elastic/terraform-provider-elasticstack/generated/kbapi"
 	"github.com/elastic/terraform-provider-elasticstack/internal/utils"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -385,5 +386,75 @@ func Test_dataViewModel_getViewIDAndSpaceID(t *testing.T) {
 			require.Equal(t, tt.expectedViewID, viewID)
 			require.Equal(t, tt.expectedSpaceID, spaceID)
 		})
+	}
+}
+
+func TestFieldFormats(t *testing.T) {
+	ctx := context.Background()
+	var diags diag.Diagnostics
+
+	tests := []struct {
+			name     string
+			input    fieldFormatModel
+			expected kbapi.DataViewsFieldformat
+	}{
+			{
+					name: "static lookup format",
+					input: fieldFormatModel{
+							ID: types.StringValue("static_lookup"),
+							Params: utils.ObjectValueFrom(ctx, &fieldFormatParamsModel{
+									LookupEntries: types.MapValueMust(types.StringType, map[string]attr.Value{
+											"200": types.StringValue("OK"),
+											"404": types.StringValue("Not Found"),
+									}),
+									UnknownKeyValue: types.StringValue("####"),
+							}, getFieldFormatParamsAttrTypes(), path.Root("params"), &diags),
+					},
+					expected: kbapi.DataViewsFieldformat{
+							Id: utils.Pointer("static_lookup"),
+							Params: &kbapi.DataViewsFieldformatParams{
+									LookupEntries: &map[string]string{
+											"200": "OK",
+											"404": "Not Found",
+									},
+									UnknownKeyValue: utils.Pointer("####"),
+							},
+					},
+			},
+			{
+					name: "url format",
+					input: fieldFormatModel{
+							ID: types.StringValue("url"),
+							Params: utils.ObjectValueFrom(ctx, &fieldFormatParamsModel{
+									UrlTemplate: types.StringValue("{{value}}"),
+									BasePath: types.StringValue("https://example.com/images/"),
+									ContentType: types.StringValue("image"),
+									Width: types.StringValue("100"),
+									Height: types.StringValue("100"),
+							}, getFieldFormatParamsAttrTypes(), path.Root("params"), &diags),
+					},
+					expected: kbapi.DataViewsFieldformat{
+							Id: utils.Pointer("url"),
+							Params: &kbapi.DataViewsFieldformatParams{
+									UrlTemplate: utils.Pointer("{{value}}"),
+									BasePath: utils.Pointer("https://example.com/images/"),
+									ContentType: utils.Pointer("image"),
+									Width: utils.Pointer("100"),
+									Height: utils.Pointer("100"),
+							},
+					},
+			},
+	}
+
+	for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+					result := convertFieldFormat(tt.input, utils.MapMeta{
+							Context: ctx,
+							Path:    path.Root("test"),
+							Diags:   &diags,
+					})
+					require.Equal(t, tt.expected, result)
+					require.Empty(t, diags)
+			})
 	}
 }

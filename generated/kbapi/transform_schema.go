@@ -770,6 +770,18 @@ func transformKibanaPaths(schema *Schema) {
 			"pattern":       Map{"type": "string"},
 			"urlTemplate":   Map{"type": "string"},
 			"labelTemplate": Map{"type": "string"},
+			"lookupEntries": Map{
+				"type": "object",
+				"additionalProperties": Map{
+					"type": "string",
+				},
+			},
+			"unknownKeyValue": Map{"type": "string"},
+			"basePath":    Map{"type": "string"},
+			"contentType": Map{"type": "string"},
+			"defaultUrl":  Map{"type": "string"},
+			"width":       Map{"type": "string"},
+			"height":      Map{"type": "string"},
 		},
 	})
 

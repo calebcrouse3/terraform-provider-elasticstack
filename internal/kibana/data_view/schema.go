@@ -135,44 +135,44 @@ func getSchema() schema.Schema {
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"pattern": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "Pattern to format the field value.",
 										},
 										"urltemplate": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "URL template for the field value.",
 										},
 										"labeltemplate": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "Label template for the field value.",
 										},
 										"lookup_entries": schema.MapAttribute{
-											Optional: true,
+											Optional:    true,
 											ElementType: types.StringType,
 											Description: "Key-value pairs for static lookup format.",
 										},
 										"unknown_key_value": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "Default value for unknown keys in static lookup format.",
 										},
 										"base_path": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "Base path for URL format.",
 										},
 										"content_type": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "Content type for URL format.",
 										},
 										"default_url": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "Default URL for URL format when value is empty.",
 										},
 										"width": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "Width for URL format image display.",
 										},
 										"height": schema.StringAttribute{
-											Optional: true,
+											Optional:    true,
 											Description: "Height for URL format image display.",
 										},
 									},

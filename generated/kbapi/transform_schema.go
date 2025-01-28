@@ -777,11 +777,11 @@ func transformKibanaPaths(schema *Schema) {
 				},
 			},
 			"unknownKeyValue": Map{"type": "string"},
-			"basePath":    Map{"type": "string"},
-			"contentType": Map{"type": "string"},
-			"defaultUrl":  Map{"type": "string"},
-			"width":       Map{"type": "string"},
-			"height":      Map{"type": "string"},
+			"basePath":        Map{"type": "string"},
+			"contentType":     Map{"type": "string"},
+			"defaultUrl":      Map{"type": "string"},
+			"width":           Map{"type": "string"},
+			"height":          Map{"type": "string"},
 		},
 	})
 

@@ -217,15 +217,15 @@ func convertFieldFormat(item fieldFormatModel, meta utils.MapMeta) kbapi.DataVie
 
 				return kbapi.DataViewsFieldformatParams{
 					LabelTemplate:   item.LabelTemplate.ValueStringPointer(),
-					Pattern:        item.Pattern.ValueStringPointer(),
-					UrlTemplate:    item.UrlTemplate.ValueStringPointer(),
-					LookupEntries:  &lookupEntries,
+					Pattern:         item.Pattern.ValueStringPointer(),
+					UrlTemplate:     item.UrlTemplate.ValueStringPointer(),
+					LookupEntries:   &lookupEntries,
 					UnknownKeyValue: item.UnknownKeyValue.ValueStringPointer(),
-					BasePath:       item.BasePath.ValueStringPointer(),
-					ContentType:    item.ContentType.ValueStringPointer(),
-					DefaultUrl:     item.DefaultUrl.ValueStringPointer(),
-					Width:          item.Width.ValueStringPointer(),
-					Height:         item.Height.ValueStringPointer(),
+					BasePath:        item.BasePath.ValueStringPointer(),
+					ContentType:     item.ContentType.ValueStringPointer(),
+					DefaultUrl:      item.DefaultUrl.ValueStringPointer(),
+					Width:           item.Width.ValueStringPointer(),
+					Height:          item.Height.ValueStringPointer(),
 				}
 			}),
 	}
